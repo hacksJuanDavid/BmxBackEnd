@@ -20,7 +20,7 @@ builder.Services.AddMapping();
 builder.Services.AddControllers();
 
 // Add authentication
-builder.Services.Authenticate(builder.Configuration);
+builder.Services.AddAuthenticate(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

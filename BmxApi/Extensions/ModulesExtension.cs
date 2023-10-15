@@ -45,7 +45,7 @@ public static class ModulesExtension
     }
 
     // Function Authenticate
-    public static IServiceCollection Authenticate(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddAuthenticate(this IServiceCollection services, IConfiguration configuration)
     {
         // Configure strongly typed settings objects
         var appSettingsSection = configuration.GetSection("AppSettings").GetSection("SecretKey");
