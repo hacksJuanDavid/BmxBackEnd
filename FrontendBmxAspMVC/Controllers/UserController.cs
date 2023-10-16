@@ -62,7 +62,7 @@ public class UserController : Controller
     }
 
     //Put: User/Edit/5
-    [HttpPut]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, User user)
     {
@@ -106,13 +106,13 @@ public class UserController : Controller
     }
 
     // DELETE: User/Delete/5
-    [HttpDelete]
+    [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int id, User user)
+    public async Task<IActionResult> Delete(User user)
     {
         try
         {
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteUserAsync(user.Id);
             return RedirectToAction(nameof(Index));
         }
         catch

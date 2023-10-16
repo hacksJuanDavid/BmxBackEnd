@@ -62,13 +62,13 @@ public class BikeController : Controller
     }
 
     // PUT: Bike/Edit/5
-    [HttpPut]
+    [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Bike bike)
+    public async Task<IActionResult> Edit(int id, Bike? bike)
     {
         try
         {
-            await _bikeService.UpdateBikeAsync(id, bike);
+            if (bike != null) await _bikeService.UpdateBikeAsync(id, bike);
             return RedirectToAction(nameof(Index));
         }
         catch
@@ -106,13 +106,13 @@ public class BikeController : Controller
     }
 
     // DELETE: Bike/Delete/5
-    [HttpDelete]
+    [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int id, Bike bike)
+    public async Task<IActionResult> Delete(Bike bike)
     {
         try
         {
-            await _bikeService.DeleteBikeAsync(id);
+            await _bikeService.DeleteBikeAsync(bike.Id);
             return RedirectToAction(nameof(Index));
         }
         catch
