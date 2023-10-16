@@ -34,13 +34,13 @@ public class BikeService : IBikeService
     public async Task<Bike> GetBikeByIdAsync(int id)
     {
         var bike = await _bikeRepository.GetBikeByIdAsync(id);
-        
+
         // If bike is null
         if (bike == null)
         {
             throw new NotFoundException("Bike not found");
         }
-        
+
         return bike;
     }
 

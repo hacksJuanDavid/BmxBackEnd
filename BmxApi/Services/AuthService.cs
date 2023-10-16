@@ -37,7 +37,7 @@ public class AuthService : IAuthService
         // Get keyBytes
         var keyBytes = Encoding.ASCII.GetBytes(_secretKey!);
         var claims = new ClaimsIdentity();
-        claims.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+        if (user.Email != null) claims.AddClaim(new Claim(ClaimTypes.Email, user.Email));
 
         // Token descriptor
         var tokenDescriptor = new SecurityTokenDescriptor

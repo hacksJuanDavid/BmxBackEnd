@@ -23,7 +23,7 @@ public class AuthRepository : IAuthRepository
     {
         // Create user
         var user = new User
-        {   
+        {
             Username = registerDto.Username,
             Email = registerDto.Email,
             Password = registerDto.Password
@@ -39,12 +39,12 @@ public class AuthRepository : IAuthRepository
     }
 
     // GetUserByEmail
-    public async Task<AuthDto?> GetUserByEmail(string email)
+    public async Task<AuthDto?> GetUserByEmail(string? email)
     {
         // Get user by email
         var user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
 
         // Return email  
-        return user != null ? new AuthDto { Email = user.Email , Password = user.Password } : null;
+        return user != null ? new AuthDto { Email = user.Email, Password = user.Password } : null;
     }
 }

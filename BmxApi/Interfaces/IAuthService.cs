@@ -8,5 +8,5 @@ public interface IAuthService
     Task<string> Auth(AuthDto authDto);
 
     // Register a user
-    Task<RegisterDto> Register (RegisterDto registerDto);
+    Task<RegisterDto> Register(RegisterDto registerDto);
 }
