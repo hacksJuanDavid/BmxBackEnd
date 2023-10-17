@@ -32,20 +32,20 @@ public class AuthController : Controller
     {
         // Authenticate the user
         var response = await _authService.Auth(authDto);
-        
+
         // Deserialize the response to a dynamic object
         dynamic responseToke = JsonConvert.DeserializeObject(response?.ToString() ?? string.Empty)!;
-        
+
         // Get the token from the response
         var token = responseToke.token?.ToString();
-        
+
         // Check if the token is null or empty
         if (string.IsNullOrEmpty(token))
         {
             // Return the view with an error message
             return View("Login");
         }
-        
+
         // Create claims for the user
         var claims = new[]
         {
