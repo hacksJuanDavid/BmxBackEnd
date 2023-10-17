@@ -1,8 +1,10 @@
 // CrudBike page
+import ListBike from "../bikecrud/listbike";
+
 export default function CrudBike() {
-    return (
-      <>
-        <h1>CrudBike</h1>
-      </>
-    );
-  }
+  return (
+    <>
+      <ListBike />
+    </>
+  );
+}
