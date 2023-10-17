@@ -49,7 +49,7 @@ public static class ModulesExtension
 
     // Function AddFluentValidationAutoValidation
     public static IServiceCollection AddValidators(this IServiceCollection services)
-    {   
+    {
         // Add validators
         services.AddScoped<IValidator<BikeDto>, BikeValidator>();
         services.AddScoped<IValidator<UserDto>, UserValidator>();

@@ -56,6 +56,12 @@ app.ConfigureExceptionHandler();
 
 app.UseHttpsRedirection();
 
+// Add CORS middleware here
+app.UseCors(corsPolicyBuilder => corsPolicyBuilder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
 app.UseAuthentication();
 
 app.UseAuthorization();
