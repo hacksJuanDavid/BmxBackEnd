@@ -1,9 +1,12 @@
 using System.Text;
 using AutoMapper;
+using BmxApi.Dtos;
 using BmxApi.Interfaces;
 using BmxApi.Mapping;
 using BmxApi.Repositories;
 using BmxApi.Services;
+using BmxApi.Validations;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -40,6 +43,16 @@ public static class ModulesExtension
 
         IMapper mapper = mapperConfig.CreateMapper();
         services.AddSingleton(mapper);
+
+        return services;
+    }
+
+    // Function AddFluentValidationAutoValidation
+    public static IServiceCollection AddValidators(this IServiceCollection services)
+    {   
+        // Add validators
+        services.AddScoped<IValidator<BikeDto>, BikeValidator>();
+        services.AddScoped<IValidator<UserDto>, UserValidator>();
 
         return services;
     }

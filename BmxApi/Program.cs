@@ -1,6 +1,8 @@
 using BmxApi.Context;
 using BmxApi.Extensions;
 using BmxApi.Middlewares;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -16,8 +18,21 @@ builder.Services.AddServices();
 // Add AutoMapper
 builder.Services.AddMapping();
 
-// Add controllers
-builder.Services.AddControllers();
+// Add FluentValidation
+builder.Services.AddValidators();
+
+// Add services to the container.
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errorDetails = context.ConstructErrorMessages();
+        return new BadRequestObjectResult(errorDetails);
+    };
+});
+
+// Add Fluent Validation
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
 // Add authentication
 builder.Services.AddAuthenticate(builder.Configuration);
