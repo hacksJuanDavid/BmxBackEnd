@@ -30,11 +30,16 @@
       "@/public/*": [
         "public/*"
       ],
+      "@/redux/*": [
+        "redux/*"
+      ]
     }
   },
   "include": [
     "app/**/*",
     "components/**/*",
+    "public/**/*",
+    "redux/**/*",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",

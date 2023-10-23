@@ -1,75 +1,48 @@
 "use client";
-import ErrorAuthorization from "../Errors/ErrorAuthorization";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-const { v4: uuidv4 } = require("uuid");
+import { useSelector, useDispatch } from "react-redux";
+import { setListUsers } from "@/redux/features/listuser";
+import ErrorAuthorization from "../Errors/ErrorAuthorization";
+import useGetAllUsers from "@/redux/api/userservice/userservicelist";
 
 export default function ListUser() {
-  // Interface User
-  interface User {
-    id: number;
-    username: string;
-    email: string;
-    password: string;
-  }
-
   // Manage state
-  const [Users, setUsers] = useState<User[]>([]);
-  const [error, setError] = useState<{ id: string; message: string } | null>(
-    null
-  );
+  const [token, setToken] = useState("");
 
-  // Get token
-  const token = localStorage.getItem("token");
+  // Get token from store redux
+  const tokenRedux = useSelector((state: any) => state.auth.token);
 
-  // Generate id error
-  const idError = useMemo(() => uuidv4(), []);
+  // Get users from store redux
+  const usersRedux = useSelector((state: any) => state.listuser.listUsers);
 
   // Get router
   const router = useRouter();
 
-  // Call manage to API
-  const getUsers = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BMX_URL}User`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  // Get dispatch
+  const dispatch = useDispatch();
 
-      if (response.status === 401) {
-        setError({
-          id: idError,
-          message: "Not authorized to access this page",
-        });
-        return;
-      }
+  // Get all users
+  const getAllUsers = useGetAllUsers();
 
-      const data = await response.json();
-      setUsers(data);
-    } catch (error) {
-      console.error("Ocurrió un error al obtener los usuarios:", error);
-      setError({ id: idError, message: "Error you get you credentials" });
-    }
-  }, [token, idError]);
-
-  // Manage useEffect
+  // Set users from getAllUsers
   useEffect(() => {
-    const fetchData = async () => {
-      if (token) {
-        await getUsers();
-      }
-    };
-    fetchData();
-  }, [token, getUsers]);
+    dispatch(setListUsers(getAllUsers));
+  }, [dispatch, getAllUsers]);
 
-  if (error) {
+  // Get token from store redux
+  useEffect(() => {
+    setToken(tokenRedux);
+  }, [tokenRedux]);
+
+  if (!token) {
+    const errorMessage = {
+      id: "404",
+      message: "Not authorized to access this page",
+    };
     return (
       <div>
-        <ErrorAuthorization id={idError} error={error} />
+        <ErrorAuthorization id={errorMessage.id} error={errorMessage} />
       </div>
     );
   }
@@ -81,24 +54,21 @@ export default function ListUser() {
   };
 
   // Handle Update
-  const handleUpdate = (id: number) => {
+  const handleUpdate = (user: any) => {
     // Redirect to update user
-    router.push("/user/update");
-    console.log("Update", id);
+    router.push(`/user/update?id=${user.id}`);
   };
 
   // Handle Details
-  const handleDetails = (id: number) => {
+  const handleDetails = (user: any) => {
     // Redirect to update user
-    router.push("/user/detail");
-    console.log("Details", id);
+    router.push(`/user/detail?id=${user.id}`);
   };
 
   // Handle Delete
-  const handleDelete = (id: number) => {
+  const handleDelete = (user: any) => {
     // Redirect to update user
-    router.push("/user/delete");
-    console.log("Delete", id);
+    router.push(`/user/delete?id=${user.id}`);
   };
 
   return (
@@ -123,7 +93,7 @@ export default function ListUser() {
               </tr>
             </thead>
             <tbody>
-              {Users.map((user) => (
+              {usersRedux?.map((user: any) => (
                 <tr key={user.id}>
                   <td>{user.id}</td>
                   <td>{user.username}</td>
@@ -132,19 +102,19 @@ export default function ListUser() {
                   <td>
                     <button
                       className="btn btn-primary rounded m-1 p-1 w-20"
-                      onClick={() => handleUpdate(user.id)}
+                      onClick={() => handleUpdate(user)}
                     >
                       Update
                     </button>
                     <button
                       className="btn btn-secondary rounded m-1 p-1 w-20"
-                      onClick={() => handleDetails(user.id)}
+                      onClick={() => handleDetails(user)}
                     >
                       Details
                     </button>
                     <button
                       className="btn btn-accent rounded m-1 p-1 w-20"
-                      onClick={() => handleDelete(user.id)}
+                      onClick={() => handleDelete(user)}
                     >
                       Delete
                     </button>

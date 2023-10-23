@@ -1,12 +1,21 @@
 "use client";
 // Login page
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setToken } from "@/redux/features/auth";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   // Handle values from form
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
-  const [Error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  // Dispatch action
+  const dispatch = useDispatch();
+
+  // Router
+  const router = useRouter();
 
   // Get values from form
   const handleEmail = (e: any) => {
@@ -18,19 +27,21 @@ export default function Login() {
   };
 
   // Handle submit form
-  const handleSubmit = async (e: any) => {
+  const handleSubmitLogin = async (e: any) => {
     e.preventDefault();
 
     // Verifying the JSON data
-    const jsonData = JSON.stringify({ Email, Password });
-    console.log("JSON Data:", jsonData);
+    const jsonData = JSON.stringify({ email, password });
 
     // Send data to backend
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BMX_URL}Auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: jsonData,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BMX_URL}Auth/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: jsonData,
+      }
+    );
 
     // Get response from backend
     const data = await res.json();
@@ -43,8 +54,11 @@ export default function Login() {
 
     // Handle success
     if (data.token) {
-      localStorage.setItem("token", data.token);
-      window.location.href = "/";
+      // Save token to store redux
+      dispatch(setToken(data.token));
+
+      // Redirect to home page
+      router.push("/");
     }
   };
 
@@ -90,7 +104,7 @@ export default function Login() {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-primary" onClick={handleSubmit}>
+                <button className="btn btn-primary" onClick={handleSubmitLogin}>
                   Login
                 </button>
               </div>

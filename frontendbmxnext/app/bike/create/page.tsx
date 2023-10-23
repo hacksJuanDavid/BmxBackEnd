@@ -1,5 +1,5 @@
 // CreateBikePage page
-import CreateBike from "@/components/bikecrud/createbike";
+import CreateBike from "components/bikecrud/createbike";
 
 export default function CreateBikePage() {
     return (

@@ -33,13 +33,11 @@ export default function ListBike() {
   }
 
   // Manage state
+  const [token, setToken] = useState("");
   const [Bikes, setBikes] = useState<Bike[]>([]);
   const [error, setError] = useState<{ id: string; message: string } | null>(
     null
   );
-
-  // Get token
-  const token = localStorage.getItem("token");
 
   // Generate id error
   const idError = useMemo(() => uuidv4(), []);
@@ -85,6 +83,11 @@ export default function ListBike() {
     };
     fetchData();
   }, [token, getBikes]);
+
+  // Get token
+  useEffect(() => {
+    setToken(localStorage.getItem("token") || "");
+  }, []);
 
   if (error) {
     return (

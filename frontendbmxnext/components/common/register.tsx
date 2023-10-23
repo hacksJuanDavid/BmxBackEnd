@@ -1,17 +1,21 @@
 "use client";
 // Register page
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Register() {
   // Handle values from form
-  const [Username, setUsername] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
-  const [Error, setError] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  // Router
+  const router = useRouter();
 
   // Get values from form
   const handleUsername = (e: any) => {
-    setUsername(e.target.value);
+    setUserName(e.target.value);
   };
 
   const handleEmail = (e: any) => {
@@ -23,12 +27,11 @@ export default function Register() {
   };
 
   // Handle submit form
-  const handleSubmit = async (e: any) => {
+  const handleSubmitRegister = async (e: any) => {
     e.preventDefault();
 
     // Verifying the JSON data
-    const jsonData = JSON.stringify({ Username, Email, Password });
-    console.log("JSON Data:", jsonData);
+    const jsonData = JSON.stringify({ userName, email, password });
 
     // Send data to backend
     const res = await fetch(
@@ -51,7 +54,8 @@ export default function Register() {
 
     // Handle success
     if (data.token) {
-      window.location.href = "/";
+      // Redirect to home page
+      router.push("/");
     }
   };
 
@@ -109,7 +113,10 @@ export default function Register() {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-primary" onClick={handleSubmit}>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleSubmitRegister}
+                >
                   Register
                 </button>
               </div>

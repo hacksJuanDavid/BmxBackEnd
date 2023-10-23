@@ -1,10 +1,11 @@
+"use client";
 // CreateUserPage page
-import CreateUser from "@/components/bikecrud/createbike";
+import CreateUser from "components/usercrud/createuser";
 
 export default function CreateUserPage() {
-    return (
-      <>
-        <CreateUser />
-      </>
-    );
-  }
+  return (
+    <>
+      <CreateUser />
+    </>
+  );
+}
