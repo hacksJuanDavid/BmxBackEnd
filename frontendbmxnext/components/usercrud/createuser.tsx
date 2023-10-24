@@ -1,10 +1,11 @@
+"use client";
 // CreateUser page
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import useCreateNewUser from "@/redux/api/userservice/userservicecreate";
 
 export default function CreateUser() {
-  // Get context
+  // Manage state
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

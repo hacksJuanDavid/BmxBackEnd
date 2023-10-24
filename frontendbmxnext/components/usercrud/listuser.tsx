@@ -3,15 +3,18 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { setListUsers } from "@/redux/features/listuser";
-import ErrorAuthorization from "../Errors/ErrorAuthorization";
+import ErrorAuthorization from "../errors/errorauthorization";
 import useGetAllUsers from "@/redux/api/userservice/userservicelist";
 
 export default function ListUser() {
-  // Manage state
-  const [token, setToken] = useState("");
+  // Manage state error authorization
+  const [errorId, setErrorId] = useState("");
+  const [error, setError] = useState("");
 
-  // Get token from store redux
-  const tokenRedux = useSelector((state: any) => state.auth.token);
+  // Get error authorization from store redux
+  const errorRedux = useSelector(
+    (state: any) => state.authorization
+  );
 
   // Get users from store redux
   const usersRedux = useSelector((state: any) => state.listuser.listUsers);
@@ -30,19 +33,19 @@ export default function ListUser() {
     dispatch(setListUsers(getAllUsers));
   }, [dispatch, getAllUsers]);
 
-  // Get token from store redux
+  // Set error authorization
   useEffect(() => {
-    setToken(tokenRedux);
-  }, [tokenRedux]);
+    if (errorRedux && errorRedux.errorId && errorRedux.error) {
+      setErrorId(errorRedux.errorId);
+      setError(errorRedux.error);
+    }
+  }, [errorRedux]);
 
-  if (!token) {
-    const errorMessage = {
-      id: "404",
-      message: "Not authorized to access this page",
-    };
+  // Handle error authorization
+  if (errorRedux && errorRedux.errorId && errorRedux.error) {
     return (
       <div>
-        <ErrorAuthorization id={errorMessage.id} error={errorMessage} />
+        <ErrorAuthorization id={errorId} error={error} />
       </div>
     );
   }

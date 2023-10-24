@@ -4,6 +4,8 @@ import { persistStore, persistReducer } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import authReducer from "@/redux/features/auth";
 import listUserReducer from "@/redux/features/listuser";
+import listBikeReducer from "../features/listbike";
+import errorAuthorizationReducer from "../features/errorauthorization";
 
 // If localStorage is not available, create a noop storage
 const createNoopStorage = () => {
@@ -30,6 +32,8 @@ const storage =
 const rootReducer = combineReducers({
   auth: authReducer,
   listuser: listUserReducer,
+  listbike: listBikeReducer,
+  authorization: errorAuthorizationReducer,
 });
 
 // Persist config

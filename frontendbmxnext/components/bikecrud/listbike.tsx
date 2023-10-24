@@ -1,132 +1,75 @@
 "use client";
-import ErrorAuthorization from "../Errors/ErrorAuthorization";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-const { v4: uuidv4 } = require("uuid");
+import { useSelector, useDispatch } from "react-redux";
+import { setListBikes } from "@/redux/features/listbike";
+import useGetAllBikes from "@/redux/api/bikeservice/bikeservicelist";
+import ErrorAuthorization from "../errors/errorauthorization";
 
 export default function ListBike() {
-  // Interface Bike
-  interface Bike {
-    id: number;
-    name: string;
-    brand: string;
-    model: string;
-    color: string;
-    frame: string;
-    fork: string;
-    bars: string;
-    stem: string;
-    grips: string;
-    seat: string;
-    seatPost: string;
-    cranks: string;
-    pedals: string;
-    sprocket: string;
-    frontWheel: string;
-    rearWheel: string;
-    frontTire: string;
-    rearTire: string;
-    frontHub: string;
-    rearHub: string;
-    chain: string;
-    pegs: string;
-  }
+  // Manage state error authorization
+  const [errorId, setIdError] = useState("");
+  const [error, setError] = useState("");
 
-  // Manage state
-  const [token, setToken] = useState("");
-  const [Bikes, setBikes] = useState<Bike[]>([]);
-  const [error, setError] = useState<{ id: string; message: string } | null>(
-    null
-  );
+  // Get error authorization from store redux
+  const errorRedux = useSelector((state: any) => state.authorization);
 
-  // Generate id error
-  const idError = useMemo(() => uuidv4(), []);
+  // Get bikes from store redux
+  const bikesRedux = useSelector((state: any) => state.listbike.listBikes);
 
-  // Get Router
+  // Get router
   const router = useRouter();
 
-  // Call manage to API
-  const getBikes = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BMX_URL}Bike`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  // Get dispatch
+  const dispatch = useDispatch();
 
-      if (response.status === 401) {
-        setError({
-          id: idError,
-          message: "Not authorized to access this page",
-        });
-        return;
-      }
+  // Get all bikes
+  const getAllBikes = useGetAllBikes();
 
-      const data = await response.json();
+  // Set bikes from getAllBikes
+  useEffect(() => {
+    dispatch(setListBikes(getAllBikes));
+  }, [dispatch, getAllBikes]);
 
-      setBikes(data);
-    } catch (error) {
-      console.error("Ocurrió un error al obtener las bicicletas:", error);
-      setError({ id: idError, message: "Error you get you credentials" });
+  // Set error authorization
+  useEffect(() => {
+    if (errorRedux && errorRedux.errorId && errorRedux.error) {
+      setIdError(errorRedux.errorId);
+      setError(errorRedux.error);
     }
-  }, [token, idError]);
+  }, [errorRedux]);
 
-  // Manage useEffect
-  useEffect(() => {
-    const fetchData = async () => {
-      if (token) {
-        await getBikes();
-      }
-    };
-    fetchData();
-  }, [token, getBikes]);
-
-  // Get token
-  useEffect(() => {
-    setToken(localStorage.getItem("token") || "");
-  }, []);
-
-  if (error) {
+  // Handle error authorization
+  if (errorRedux && errorRedux.errorId && errorRedux.error) {
     return (
       <div>
-        <ErrorAuthorization id={idError} error={error} />
+        <ErrorAuthorization id={errorId} error={error} />
       </div>
     );
   }
 
   // Handle Create
   const handleCreate = () => {
-    // Redirect to create
+    // Redirect to create bike
     router.push("/bike/create");
-
-    console.log("Create");
   };
 
   // Handle handleUpdate
-  const handleUpdate = (id: number) => {
-    // Redirect to update
-    router.push("/bike/update");
-
-    console.log("Update", id);
+  const handleUpdate = (bike: any) => {
+    // Redirect to update bike
+    router.push(`/bike/update?id=${bike.id}`);
   };
 
   // Handle Details
-  const handleDetails = (id: number) => {
-    // Redirect to details
-    router.push("/bike/detail");
-
-    console.log("Details", id);
+  const handleDetails = (bike: any) => {
+    // Redirect to update bike
+    router.push(`/bike/detail?id=${bike.id}`);
   };
 
   // Handle Delete
-  const handleDelete = (id: number) => {
-    // Redirect to delete
-    router.push("/bike/delete");
-
-    console.log("Delete", id);
+  const handleDelete = (bike: any) => {
+    // Redirect to delete bike
+    router.push(`/bike/delete?id=${bike.id}`);
   };
 
   return (
@@ -170,7 +113,7 @@ export default function ListBike() {
               </tr>
             </thead>
             <tbody>
-              {Bikes.map((bike) => (
+              {bikesRedux?.map((bike: any) => (
                 <tr key={bike.id}>
                   <td>{bike.id}</td>
                   <td>{bike.name}</td>
@@ -198,19 +141,19 @@ export default function ListBike() {
                   <td>
                     <button
                       className="btn btn-primary rounded m-1 p-1 w-20"
-                      onClick={() => handleUpdate(bike.id)}
+                      onClick={() => handleUpdate(bike)}
                     >
                       Update
                     </button>
                     <button
                       className="btn btn-secondary rounded m-1 p-1 w-20"
-                      onClick={() => handleDetails(bike.id)}
+                      onClick={() => handleDetails(bike)}
                     >
                       Details
                     </button>
                     <button
                       className="btn btn-accent rounded m-1 p-1 w-20"
-                      onClick={() => handleDelete(bike.id)}
+                      onClick={() => handleDelete(bike)}
                     >
                       Delete
                     </button>

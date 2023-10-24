@@ -1,3 +1,4 @@
+"use client";
 // UpdateUser page
 import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
