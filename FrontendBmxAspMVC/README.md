@@ -16,6 +16,12 @@ This is a ASP.NET project MVC for BMX, showing data in tables how to use the BMX
 dotnet run
 ```
 
+## Documentation with url
+
+```bash
+http://localhost:5247
+```
+
 ## Dependencies with version project
 
 ```bash
