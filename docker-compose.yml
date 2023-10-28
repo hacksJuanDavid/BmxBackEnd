@@ -1,0 +1,32 @@
+﻿version: "3.8"
+
+services:
+  # Api
+  bmxapi:
+    image: bmxapi:latest
+    container_name: bmxapi_container
+    ports:
+      - "5090:80"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+  # Db MySql
+  db:
+    image: mysql:8.0
+    container_name: mysql_container_bmxdb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bmxdb
+      MYSQL_USER: bmxuser
+      MYSQL_PASSWORD: BM3X34s4MsUs81*01
+    ports:
+      - "3309:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
+
