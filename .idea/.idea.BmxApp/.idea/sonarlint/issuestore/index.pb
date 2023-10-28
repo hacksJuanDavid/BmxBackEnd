@@ -123,3 +123,5 @@ _
 /FrontendBmxAspMVC/Controllers/BikeController.cs,5/c/5c1830c9d1462f446fac1d39b3fd05b1fd691e18
 _
 /FrontendBmxAspMVC/Controllers/UserController.cs,c/9/c9d1074e97e72542d5fdb6ea7a01b234cb14f64f
+A
+BmxApi/Dockerfile,1/7/177529be4680ea2db5490b7c30028e995bcb1352
