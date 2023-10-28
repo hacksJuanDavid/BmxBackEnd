@@ -14,19 +14,8 @@ services:
       - ASPNETCORE_URLS=http://+:80
   # Db MySql
   db:
-    image: mysql:8.0
+    image: mysqlbmxdb:latest
     container_name: mysql_container_bmxdb
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: bmxdb
-      MYSQL_USER: bmxuser
-      MYSQL_PASSWORD: BM3X34s4MsUs81*01
     ports:
       - "3309:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
-
-volumes:
-  dbdata:
-

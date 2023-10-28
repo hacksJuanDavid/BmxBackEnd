@@ -21,7 +21,7 @@ This project contains the following parts:
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-## BmxApi Connection string for the database located in the appsettings.json file 
+## BmxApi Connection string for the database located in the appsettings.json file
 
 ```
   "ConnectionStrings": {
@@ -37,50 +37,13 @@ This project contains the following parts:
   },
 ```
 
-## Building create images with using docker-compose for the project BmxApi and db, using Dockerfile create the image of BmxApi
+## Run images with using docker-compose for the project BmxApi and db
 
 ```
 version: "3.8"
 
 services:
-  bmxapi:
-    image: bmxapi
-    container_name: bmxapi_container
-    build:
-      context: .
-      dockerfile: BmxApi/Dockerfile
-    ports:
-      - "5090:80"
-    depends_on:
-      - db
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
-  # Db MySql
-  db:
-    image: mysql:8.0
-    container_name: mysql_container_bmxdb
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: bmxdb
-      MYSQL_USER: bmxuser
-      MYSQL_PASSWORD: BM3X34s4MsUs81*01
-    ports:
-      - "3309:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
-
-volumes:
-  dbdata:
-```
-
-## Building images with using docker compose for the bmxapi with database
-
-```
-version: "3.8"
-
-services:
+  # Api
   bmxapi:
     image: bmxapi:latest
     container_name: bmxapi_container
@@ -93,24 +56,14 @@ services:
       - ASPNETCORE_URLS=http://+:80
   # Db MySql
   db:
-    image: mysql:8.0
+    image: mysqlbmxdb:latest
     container_name: mysql_container_bmxdb
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: bmxdb
-      MYSQL_USER: bmxuser
-      MYSQL_PASSWORD: BM3X34s4MsUs81*01
     ports:
       - "3309:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
-
-volumes:
-  dbdata:
 ```
 
-### Building images with using docker compose and using repository of docker hub for the bmxapi with database
+## Run using images repository of docker hub for the project BmxApi and db
 
 ```
 version: "3.8"
@@ -131,17 +84,37 @@ services:
     image: thenowrock/testbmxapi:mysqlbmxdb
     container_name: mysql_container_bmxdb
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: bmxdb
-      MYSQL_USER: bmxuser
-      MYSQL_PASSWORD: BM3X34s4MsUs81*01
     ports:
       - "3309:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
+```
 
-volumes:
-  dbdata:
+## Building images with using docker compose and using repository of docker hub for the bmxapi with database cargue data up container
 
+```
+version: "3.8"
+
+services:
+  bmxapi:
+    image: bmxapi
+    container_name: bmxapi_container
+    build:
+      context: .
+      dockerfile: BmxApi/Dockerfile
+    ports:
+      - "5090:80"
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+  # Db MySql
+  db:
+    image: mysqlbmxdb
+    build:
+      context: .
+      dockerfile: Database/Dockerfile
+    container_name: mysql_container_bmxdb
+    restart: always
+    ports:
+      - "3309:3306"
 ```
