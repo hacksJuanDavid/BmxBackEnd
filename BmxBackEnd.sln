@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BmxApi", "BmxApi\BmxApi.csproj", "{BA5323D2-62ED-4192-ABF0-09C448F499CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontendBmxAspMVC", "FrontendBmxAspMVC\FrontendBmxAspMVC.csproj", "{F0E148B3-8DF0-4021-BE96-8F7376A71D86}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
